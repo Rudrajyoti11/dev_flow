@@ -1,23 +1,27 @@
 // eslint.config.mjs
-import js from "@eslint/js";
-import next from "eslint-config-next";
-import prettier from "eslint-config-prettier";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
 
-const config = [
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
   // Ignore paths
   {
     ignores: ["components/ui/**/*"],
   },
 
-  // Base recommended configs
-  js.configs.recommended,
-
-  // Next.js config
-  ...next,
-
-  // Prettier
-  prettier,
-
+  ...compat.extends(
+    "next/core-web-vitals",
+    "next/typescript",
+    "standard",
+    "prettier"
+    //"plugin:tailwindcss/recommended"
+  ),
   // Custom rules
   {
     rules: {
@@ -61,4 +65,4 @@ const config = [
   },
 ];
 
-export default config;
+export default eslintConfig;
